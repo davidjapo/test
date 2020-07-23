@@ -9,6 +9,8 @@ public class Pedido {
 	private double precioUnitario;
 	private String seccion;
 	private Date fecha;
+	private String birthdate = "13-01-2000";
+	
 	public Pedido(String producto, int unidades, double precioUnitario, String seccion,Date fecha) {
 		super();
 		this.producto = producto;
