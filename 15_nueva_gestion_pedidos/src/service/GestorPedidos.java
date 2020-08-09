@@ -1,10 +1,12 @@
-package service;
+																																package service;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,7 +24,8 @@ public class GestorPedidos {
 	private Stream<Pedido> streamPedido() {
 		try {
 			return Files.lines(path, StandardCharsets.UTF_8)
-					.map(s -> Utilidades.construirPedido(s));
+					//.map(s -> Utilidades.construirPedido(s));
+					.map(Utilidades::construirPedido); // es como la expresión anterior pero expresada como referencia a metodo en lugar de como expresión lambda.
 		} catch (IOException ex) {
 			ex.getMessage();
 			ex.printStackTrace();
@@ -86,7 +89,20 @@ public class GestorPedidos {
 
 	// lista de nombres de sección, no repetidas
 	public List<String> secciones() {
+		return streamPedido()
+				//.map(p->p.getSeccion())
+				.map(Pedido::getSeccion) // misma expresión que la anterior pero expresada como referencia a metodo.
+				.distinct()
+				.collect(Collectors.toList());
 
+	}
+	
+	public List<Pedido> pedidosRangoFecha(LocalDate fecha, Period periodo){
+		LocalDate fechaFin =fecha.plus(periodo); //A la fecha inicial le suma el periodo para hacer la fecha final	
+		return streamPedido()
+				.filter(p->p.getFecha().after(Utilidades.convertLocalDatetoDate(fecha)) &&
+						p.getFecha().before(Utilidades.convertLocalDatetoDate(fechaFin)))
+				.collect(Collectors.toList());
 	}
 
 }

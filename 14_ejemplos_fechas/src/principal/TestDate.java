@@ -18,7 +18,7 @@ public class TestDate {
 		DateFormat df2 = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL, new Locale("es"));
 		System.out.println(df2.format(fecha));
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/YY HH:mm");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/YY");
 		System.out.println(sdf.format(fecha));
 		
 		//Parseado de fecha

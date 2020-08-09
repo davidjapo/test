@@ -1,0 +1,3 @@
+p1,2,1.5,muebles,10/05/2020
+p2,5,4,deportes,30/07/2020
+Memoria RAM DDR2x64,30,10,informatica,31/07/2020

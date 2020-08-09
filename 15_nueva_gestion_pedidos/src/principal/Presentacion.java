@@ -1,16 +1,17 @@
 package principal;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 
-import model.Pedido;
 import service.GestorPedidos;
 
 public class Presentacion {
 
 	public static void main(String[] args) throws ParseException {
 		String[] fechas = {"11/08/2008","16/09/2019","01/01/2028","25/04/2015","11/11/2020"};
+		/*
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		GestorPedidos gestor = new GestorPedidos();
 		gestor.grabarPedido(new Pedido("p1",2,2.5,"alimentción",sdf.parse(fechas[0])));
@@ -27,6 +28,17 @@ public class Presentacion {
 		
 		//promedio sección alimentación
 		System.out.println(gestor.promedioSeccion("alimentación"));
+		*/
+		
+		//Dada la fecha, buscar pedido en los 5 años posteriores.
+		String fecha = "01/10/2020";
+		GestorPedidos gestor = new GestorPedidos();
+		LocalDate ld = LocalDate.parse(fecha, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+		Period p =Period.ofYears(5);
+		gestor.pedidosRangoFecha(ld,p)
+			.forEach(pd->System.out.println(pd.getProducto()));
+					
+		
 	}
 
 }

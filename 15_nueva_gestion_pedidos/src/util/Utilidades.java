@@ -2,6 +2,10 @@ package util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 
 import model.Pedido;
 
@@ -24,5 +28,21 @@ public class Utilidades {
 	
 	public static String construirCadena(Pedido pedido, String SEPARADOR) {
 		return pedido.getProducto()+SEPARADOR+pedido.getUnidades()+SEPARADOR+pedido.getPrecioUnitario()+SEPARADOR+pedido.getSeccion()+SEPARADOR+sdf.format(pedido.getFecha());
+	}
+	
+	public static LocalDate convertDateToLocalDate(Date f) {
+		//convertir Date a LocalDate
+				LocalDate ld=Instant.ofEpochMilli(f.getTime())
+						.atZone(ZoneId.systemDefault())
+						.toLocalDate(); 
+				return ld;
+	}
+	
+	public static Date convertLocalDatetoDate(LocalDate local) {
+		//convertir LocalDate a Date
+		Date fe=Date.from(
+				local.atStartOfDay(ZoneId.systemDefault())
+				.toInstant()); 
+		return fe; 
 	}
 }

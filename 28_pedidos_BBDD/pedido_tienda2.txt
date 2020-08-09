@@ -1,0 +1,5 @@
+p11,15,7,alimentación,28/07/2020
+p6,3,2,alimentación,15/05/2020
+p3,5,3,musica,27/07/2020
+Gafas de bucear Black,2,5,deportes_acuaticos,30/07/2020
+Set bolígrados colores BIC,2,2.5,papeleria,31/07/2020
