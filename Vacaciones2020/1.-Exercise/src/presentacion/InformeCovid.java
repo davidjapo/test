@@ -31,7 +31,7 @@ public class InformeCovid {
 
 			// Se controla el mensaje al usuario según el procesado realizado.
 			resultado = (service.csvToDDBB(service.csvToList())) ? 
-					"Se han leído " + service.csvToList().size() + " registros y "+service.getContador()+" han sido"
+					"Se han leído " + service.csvToList().count() + " registros y "+service.getContador()+" han sido"
 							+ " insertados en la base de datos satisfactoriamente!" : "El volcado no se ha realizado.";
 			System.out.println(resultado);
 

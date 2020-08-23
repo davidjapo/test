@@ -1,5 +1,8 @@
 package model;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Casos {
@@ -79,7 +82,18 @@ public class Casos {
 			this.num_casos_prueba_desconocida = num_casos_prueba_desconocida;
 		}
 
-
+		public static Casos buildFromArray(String[] elementos) {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			try {
+				return new Casos(elementos[0], sdf.parse(elementos[1]), Integer.parseInt(elementos[2]),
+						Integer.parseInt(elementos[3]), Integer.parseInt(elementos[4]), Integer.parseInt(elementos[5]),
+						Integer.parseInt(elementos[6]));
+			} catch (NumberFormatException | ParseException e) {
+				e.printStackTrace();
+				return null;
+			}
+			
+		}
 
 		
 		

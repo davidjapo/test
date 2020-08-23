@@ -9,14 +9,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.BiFunction;
+import java.util.stream.Stream;
 
 import com.google.gson.Gson;
 
@@ -27,6 +27,12 @@ public class CasosService {
 	private String path;
 	private Path pt;
 	private int contador;
+	
+	//Se comprueban los casos duplicados implementando la interfaz BiFunction en un objeto:
+	BiFunction<Stream<Casos>,Casos,Boolean> biFunction = (l,caso) -> {
+		Optional<Casos> op = l.filter(c -> c.getCcaa_iso().equalsIgnoreCase(caso.getCcaa_iso()) && c.getFecha().equals(caso.getFecha())).findFirst();
+		return op.isPresent();
+	};
 
 	public CasosService(String ruta) {
 		super();
@@ -34,7 +40,7 @@ public class CasosService {
 		pt = Paths.get(path);
 	}
 
-	public List<Casos> csvToList() {
+	/*public Stream<Casos> csvToList() {
 		if (ifExistFile()) {
 			final String SEPARADOR = ",";
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -47,19 +53,36 @@ public class CasosService {
 							Integer.parseInt(lineas[3]), Integer.parseInt(lineas[4]), Integer.parseInt(lineas[5]),
 							Integer.parseInt(lineas[6]));
 					//Se comprueban los casos duplicados antes de insertarlos en la lista:
-					if(!biFunction.apply(casos, nuevoCaso))
+					if(!biFunction.apply(casos.stream(), nuevoCaso))
 					casos.add(nuevoCaso);
 				}
-				return casos;
+				return casos.stream();
 			} catch (IOException | NumberFormatException | ParseException e1) {
 				e1.printStackTrace();
 				return null;
 			}
 		}
 		return null;
+	}*/
+	
+	//Igual que el método anterior pero con un Stream y sin implementar el control de duplicados:
+	public Stream<Casos> csvToList() {
+		if (ifExistFile()) {
+			final String SEPARADOR = ",";
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			try {
+				Stream<String> stream = Files.lines(Paths.get(path));
+				return stream.map(linea -> linea.split(SEPARADOR))
+				.map(Casos::buildFromArray);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+		}
+		return null;
 	}
 
-	public boolean csvToDDBB(List<Casos> casos) {
+	public boolean csvToDDBB(Stream<Casos> casos) {
 		if (casos != null) {
 			try (Connection con = ConexionBBDD.obtenerConexion();) {
 				// Sintaxis SQL para insertar cumpliendo condición, primero consulta que no exista y después inserta:
@@ -144,16 +167,7 @@ public class CasosService {
 		}
 		return false;
 	}
-	
-	
-	BiFunction<List<Casos>,Casos,Boolean> biFunction = (l,c) -> {
-		for(Casos caso : l) {
-			if(caso.getCcaa_iso().equalsIgnoreCase(c.getCcaa_iso()) && caso.getFecha().equals(c.getFecha()))
-				return true;
-		}
-		return false;
-	};
-	
+
 	//Obtiene el conteo de tuplas añadidas en la BBDD:
 	public int getContador() {
 		return contador;		

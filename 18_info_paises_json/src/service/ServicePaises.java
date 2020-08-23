@@ -32,8 +32,8 @@ public class ServicePaises {
 	private Stream<Pais> getStream() {
 		Gson gson = new Gson();
 		//gson.fromJson(json,Pais.class); //Usa la técnica reflexión que identifica los getter y setter.
-		Pais[] paises = gson.fromJson(json, Pais[].class)
-		Arrays.stream(paises);
+		Pais[] paises = gson.fromJson(json, Pais[].class);
+		return Arrays.stream(paises);
 	}
 	
 	private Pais convertirAPais(JSONObject s) {
